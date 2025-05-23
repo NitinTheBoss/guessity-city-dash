@@ -4,7 +4,7 @@ import CityAutocomplete from '../components/CityAutocomplete';
 import GuessResult from '../components/GuessResult';
 import WinScreen from '../components/WinScreen';
 import GameHeader from '../components/GameHeader';
-import { processGuess, getRandomCity } from '../utils/gameLogic';
+import { processGuess, getDailyCity } from '../utils/gameLogic';
 import citiesData from '../data/cities.json';
 
 interface City {
@@ -15,19 +15,10 @@ interface City {
   population: number;
 }
 
-interface GuessResult {
-  city: City;
-  distance: number;
-  direction: string;
-  populationDelta: number;
-  stateMatch: boolean;
-  isCorrect: boolean;
-}
-
 const Index = () => {
   const [cities] = useState<City[]>(citiesData);
   const [targetCity, setTargetCity] = useState<City | null>(null);
-  const [guesses, setGuesses] = useState<GuessResult[]>([]);
+  const [guesses, setGuesses] = useState<any[]>([]);
   const [gameWon, setGameWon] = useState(false);
 
   // Initialize game
@@ -36,11 +27,11 @@ const Index = () => {
   }, []);
 
   const startNewGame = () => {
-    const newTarget = getRandomCity(cities);
+    const newTarget = getDailyCity(cities);
     setTargetCity(newTarget);
     setGuesses([]);
     setGameWon(false);
-    console.log('New target city:', newTarget.name); // For debugging
+    console.log('Daily target city:', newTarget.name); // For debugging
   };
 
   const handleCityGuess = (guessedCity: City) => {

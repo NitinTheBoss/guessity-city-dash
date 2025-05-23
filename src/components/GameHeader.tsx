@@ -8,7 +8,7 @@ interface GameHeaderProps {
   onNewGame: () => void;
 }
 
-const GameHeader: React.FC<GameHeaderProps> = ({ targetCity, guessCount, onNewGame }) => {
+const GameHeader: React.FC<GameHeaderProps> = ({ guessCount, onNewGame }) => {
   return (
     <div className="text-center mb-8">
       <div className="flex items-center justify-center gap-4 mb-4">
@@ -25,7 +25,7 @@ const GameHeader: React.FC<GameHeaderProps> = ({ targetCity, guessCount, onNewGa
       </div>
       
       <p className="text-gray-600 mb-2">
-        🌍 Guess the hidden Indian city!
+        🌍 Guess today's hidden Indian city!
       </p>
       
       <div className="flex items-center justify-center gap-6 text-sm text-gray-500">
@@ -35,7 +35,7 @@ const GameHeader: React.FC<GameHeaderProps> = ({ targetCity, guessCount, onNewGa
         </div>
         <div className="flex items-center gap-1">
           <span className="w-2 h-2 bg-green-500 rounded-full"></span>
-          <span>Target: {targetCity.state}</span>
+          <span>Daily Challenge</span>
         </div>
       </div>
     </div>

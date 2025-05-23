@@ -1,4 +1,3 @@
-
 interface City {
   name: string;
   state: string;
@@ -93,7 +92,15 @@ export const processGuess = (guessedCity: City, targetCity: City): GuessResult =
   };
 };
 
-// Get random city for the target
+// Get daily city based on current date (same for everyone)
+export const getDailyCity = (cities: City[]): City => {
+  const today = new Date();
+  const daysSinceEpoch = Math.floor(today.getTime() / (1000 * 60 * 60 * 24));
+  const index = daysSinceEpoch % cities.length;
+  return cities[index];
+};
+
+// Get random city for the target (keeping for backward compatibility)
 export const getRandomCity = (cities: City[]): City => {
   return cities[Math.floor(Math.random() * cities.length)];
 };

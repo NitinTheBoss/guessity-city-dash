@@ -1,4 +1,3 @@
-
 import React, { useEffect } from 'react';
 import { Share2, Copy } from 'lucide-react';
 import { toast } from '@/hooks/use-toast';
@@ -69,7 +68,7 @@ const WinScreen: React.FC<WinScreenProps> = ({ targetCity, guesses, onPlayAgain 
     };
   }, []);
 
-  const shareText = `I guessed ${targetCity.name} in ${guessCount} tries on Guessity! 🌍\nCan you beat me? Play now 👉`;
+  const shareText = `I guessed today's city in ${guessCount} tries on Guessity! 🌍\nCan you beat me? Play now 👉`;
   const gameLink = window.location.href;
 
   const handleWhatsAppShare = () => {
