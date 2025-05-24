@@ -4,7 +4,8 @@ import CityAutocomplete from '../components/CityAutocomplete';
 import GuessResult from '../components/GuessResult';
 import WinScreen from '../components/WinScreen';
 import GameHeader from '../components/GameHeader';
-import { processGuess, getDailyCity } from '../utils/gameLogic';
+import GameModeSelector from '../components/GameModeSelector';
+import { processGuess, getDailyCity, getRandomCity } from '../utils/gameLogic';
 import citiesData from '../data/cities.json';
 
 interface City {
@@ -20,18 +21,23 @@ const Index = () => {
   const [targetCity, setTargetCity] = useState<City | null>(null);
   const [guesses, setGuesses] = useState<any[]>([]);
   const [gameWon, setGameWon] = useState(false);
+  const [gameMode, setGameMode] = useState<'daily' | 'infinite' | null>(null);
 
-  // Initialize game
+  // Initialize game when mode is selected
   useEffect(() => {
-    startNewGame();
-  }, []);
+    if (gameMode) {
+      startNewGame();
+    }
+  }, [gameMode]);
 
   const startNewGame = () => {
-    const newTarget = getDailyCity(cities);
+    if (!gameMode) return;
+    
+    const newTarget = gameMode === 'daily' ? getDailyCity(cities) : getRandomCity(cities);
     setTargetCity(newTarget);
     setGuesses([]);
     setGameWon(false);
-    console.log('Daily target city:', newTarget.name); // For debugging
+    console.log(`${gameMode} target city:`, newTarget.name); // For debugging
   };
 
   const handleCityGuess = (guessedCity: City) => {
@@ -47,8 +53,28 @@ const Index = () => {
   };
 
   const handlePlayAgain = () => {
-    startNewGame();
+    if (gameMode === 'infinite') {
+      startNewGame();
+    } else {
+      // For daily mode, go back to mode selection
+      setGameMode(null);
+      setTargetCity(null);
+      setGuesses([]);
+      setGameWon(false);
+    }
   };
+
+  const handleBackToModes = () => {
+    setGameMode(null);
+    setTargetCity(null);
+    setGuesses([]);
+    setGameWon(false);
+  };
+
+  // Show mode selector if no mode is selected
+  if (!gameMode) {
+    return <GameModeSelector onModeSelect={setGameMode} />;
+  }
 
   if (!targetCity) {
     return (
@@ -65,6 +91,8 @@ const Index = () => {
           targetCity={targetCity}
           guessCount={guesses.length}
           onNewGame={startNewGame}
+          onBackToModes={handleBackToModes}
+          gameMode={gameMode}
         />
 
         <div className="max-w-2xl mx-auto">
@@ -99,7 +127,7 @@ const Index = () => {
 
           {guesses.length === 0 && (
             <div className="text-center py-12">
-              <div className="text-6xl mb-4">🗺️</div>
+              <div className="text-6xl mb-4">🗺️🇮🇳</div>
               <h3 className="text-xl font-semibold text-gray-700 mb-2">
                 Ready to start guessing?
               </h3>
@@ -133,6 +161,7 @@ const Index = () => {
             targetCity={targetCity}
             guesses={guesses}
             onPlayAgain={handlePlayAgain}
+            gameMode={gameMode}
           />
         )}
       </div>
